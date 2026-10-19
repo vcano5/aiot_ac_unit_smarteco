@@ -1,0 +1,53 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE users (
+    id TEXT PRIMARY KEY, 
+    name TEXT, 
+    line_id TEXT
+);
+
+CREATE TABLE devices (
+    mac TEXT PRIMARY KEY, 
+    hostname TEXT, 
+    vendor TEXT, 
+    lastseen DATETIME,
+    owner_id TEXT,
+    FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
+CREATE TABLE temperature (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    timestamp DATETIME, 
+    temperature REAL NOT NULL, 
+    humidity REAL
+);
+
+CREATE TABLE logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    timestamp DATETIME, 
+    desired_temp REAL, 
+    sensor_temp REAL, 
+    humidity REAL, 
+    connected_devices INTEGER, 
+    current_status INTEGER, 
+    overrided INTEGER
+);
+
+CREATE TABLE surveys (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    user_id TEXT, 
+    date DATETIME, 
+    was_cold INTEGER, 
+    was_ok INTEGER,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE user_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    is_cold INTEGER, 
+    is_warm INTEGER, 
+    timestamp DATETIME, 
+    actual_temp REAL, 
+    user_id TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
